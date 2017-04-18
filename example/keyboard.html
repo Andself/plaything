@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Pragma" content="no-cache, no-store, must-revalidate, max-age=0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <title>Andself</title>
+  <style>
+    body {
+      text-align: center;
+    }
+    #app span {
+      display: inline-block;
+      color: #666;
+      width: 52px;
+      height: 52px;
+      border: 1px solid #666;
+      border-radius: 4px;
+      line-height: 52px;
+      margin: 3px;
+    }
+    #app span.active {
+      color: #fff;
+      border-color: #f4f4f4;
+      background: #000;
+      box-shadow: 0 0 10px 3px #333;
+    }
+    span.active:before {
+      content: attr(data-key);
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      z-index: 9;
+      left: 50%;
+      bottom: 50%;
+      transform: translate(-50%, -50%);
+      background: #f4f4f4;
+      border: 1px solid #000;
+      border-radius: 6px;
+      line-height: 60px;
+      color: #000;
+      font-size: 32px;
+    }
+    .capital span {
+      text-transform: uppercase;
+    }
+    .capital span.active:before {
+      border-color: #569ae6;
+      color: #569ae6;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- script -->
+  <script>
+    const app = {
+      keys: 'qwertyuiop asdfghjkl zxcvbnm',
+      box: document.getElementById('app'),
+      buttos: null,
+      init: () => {
+        app.keys.split('').forEach( el => {
+          if (/\s/.test(el)) {
+            let br = document.createElement('br')
+            app.box.appendChild(br)
+          } else {
+            let newNode = document.createElement('span')
+            newNode.setAttribute('data-key', el)
+            newNode.innerHTML = el
+            app.box.appendChild(newNode)
+          }
+        })
+
+        app.buttos = app.box.getElementsByTagName('span')
+        document.addEventListener('keydown', app.handleKey, false)
+      },
+      handleKey: (e) => {
+        if (e.key === 'CapsLock') {
+           app.box.className = app.box.className === 'capital' ? '' : 'capital'
+           return false
+        }
+        for (let i = 0; i < app.buttos.length; i ++) {
+          let el = app.buttos[i]
+          el.className = el.dataset.key === e.key ? 'active' : ''
+        }
+      }
+    }
+    app.init()
+  </script>
+</body>
+</html>
