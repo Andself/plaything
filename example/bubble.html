@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Pragma" content="no-cache, no-store, must-revalidate, max-age=0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <title>Andself</title>
+  <style>
+  .paopao {
+    position: absolute;
+    pointer-events: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    animation: fade 0.8s;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 1;
+    } to {
+      opacity: 0;
+      transform: translateY(-80px) scale(1.5);
+    }
+  }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <select name="mode" value="click" id="listerMode">
+      <option value="click">click</option>
+      <option value="mousemove">mousemove</option>
+      <option value="mousedown">mousedown</option>
+    </select>
+  </div>
+  <script>
+    class Bubble {
+      constructor (mode = 'click') {
+        this.mode = mode
+      }
+      static getRandomColor () {
+        return '#' + (Math.random() * (0xffffff + 1) << 0).toString(16)
+      }
+      createBubble (event, _this) {
+        const { clientX, clientY } = event
+        const dom = document.createElement('div')
+        dom.className = 'paopao'
+        dom.style.left = clientX + 'px'
+        dom.style.top = clientY + 'px'
+        dom.style.backgroundColor = Bubble.getRandomColor()
+
+        document.body.appendChild(dom)
+        dom.addEventListener('animationend', () => { document.body.removeChild(dom) })
+      }
+      init () {
+        document.addEventListener(this.mode, this.createBubble, false)
+      }
+      changeMode (newMode) {
+        document.removeEventListener(this.mode, this.createBubble, false)
+        this.mode = newMode
+        document.addEventListener(newMode, this.createBubble, false)
+      }
+    }
+
+    const myBubble = new Bubble()
+    myBubble.init()
+
+    document.getElementById('listerMode').onchange = function (event) {
+      myBubble.changeMode(event.target.value)
+    }
+  </script>
+</body>
+</html>
