@@ -44,7 +44,7 @@
       static getRandomColor () {
         return '#' + (Math.random() * (0xffffff + 1) << 0).toString(16)
       }
-      createBubble (event, _this) {
+      createBubble (event) {
         const { clientX, clientY } = event
         const dom = document.createElement('div')
         dom.className = 'paopao'
